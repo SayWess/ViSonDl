@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ViSonDl</string>
+    <string name="videos">Vidéos</string>
+    <string name="playlists">Playlists</string>
+    <string name="startDownloadTxt">Start Download</string>
+    <string name="info">Info Supplémentaires</string>
+    <string name="deleteItem">Delete Item</string>
+    <string name="switchVideoPlaylist">Switch Video and Playlist</string>
+    <string name="thumbnailImage">Thumbnail Image</string>
+    <string name="title">Title</string>
+    <string name="downloadPath">Download Path</string>
+</resources>
