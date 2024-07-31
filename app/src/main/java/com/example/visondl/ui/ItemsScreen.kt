@@ -1,23 +1,18 @@
 package com.example.visondl.ui
 
 import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Download
@@ -34,8 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -80,9 +73,11 @@ fun ItemsScreen(
             itemsList = uiState.items.filter { item -> if (isPlaylist) item.isPlaylist else !item.isPlaylist }
         )
 
-        Row(modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(bottom = 10.dp)) {
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 10.dp)
+        ) {
             DownloadButton(
                 modifier = modifier,
                 isDownloading = if (isPlaylist) uiState.isDownloadingPlaylists else uiState.isDownloadingVideos,
@@ -109,8 +104,7 @@ fun ItemsColumn(
     onImageLoadingError: (String) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
-        itemsIndexed(items = itemsList, key = { _, item -> item.id}) {
-                index, item ->
+        itemsIndexed(items = itemsList, key = { _, item -> item.id }) { index, item ->
             ItemRow(item = item,
                 onItemInfoClick = {
                     Log.d(TAG, "$item")
@@ -120,7 +114,10 @@ fun ItemsColumn(
                 onImageLoadingError = { onImageLoadingError(item.id) }
             )
 
-            if (index < itemsList.lastIndex) HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.5F))
+            if (index < itemsList.lastIndex) HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.5F)
+            )
         }
     }
 }
@@ -128,23 +125,27 @@ fun ItemsColumn(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemRow(
-    item : ItemUiState,
-    modifier : Modifier = Modifier,
+    item: ItemUiState,
+    modifier: Modifier = Modifier,
     onItemInfoClick: () -> Unit,
     onImageLoadingError: () -> Unit,
     onItemLongClick: () -> Unit
 ) {
 
     val rowModifier = when (item.state) {
-        DownloadState.DOWNLOADABLE, DownloadState.TODOWNLOAD, DownloadState.DOWNLOADING -> modifier.background(MaterialTheme.colorScheme.primaryContainer)
+        DownloadState.DOWNLOADABLE, DownloadState.TODOWNLOAD, DownloadState.DOWNLOADING -> modifier.background(
+            MaterialTheme.colorScheme.primaryContainer
+        )
+
         DownloadState.DOWNLOADED -> modifier.background(MaterialTheme.colorScheme.secondaryContainer)
         DownloadState.ERROR -> modifier.background(MaterialTheme.colorScheme.errorContainer)
     }
 
-    Row(modifier = rowModifier
-        .combinedClickable(onClick = onItemInfoClick, onLongClick = onItemLongClick)
-        .padding(2.dp)
-        .height(50.dp),
+    Row(
+        modifier = rowModifier
+            .combinedClickable(onClick = onItemInfoClick, onLongClick = onItemLongClick)
+            .padding(2.dp)
+            .height(50.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AsyncImage(
@@ -156,7 +157,9 @@ fun ItemRow(
             onError = { onImageLoadingError() },
             placeholder = painterResource(R.drawable.ic_broken_image),
             contentDescription = stringResource(id = R.string.thumbnailImage),
-            modifier = modifier.width((90.dp)).clip(RoundedCornerShape(percent = 70)),
+            modifier = modifier
+                .width((90.dp))
+                .clip(RoundedCornerShape(percent = 70)),
             contentScale = ContentScale.FillWidth
             //modifier = modifier.weight(1f)
         )
@@ -198,6 +201,7 @@ fun ItemRow(
                     )
                 )
             }
+
             DownloadState.DOWNLOADING -> {
                 Text(
                     text = "${item.downloadPercent}" + if (!item.isPlaylist) "%" else "",
@@ -210,6 +214,7 @@ fun ItemRow(
                         .weight(0.15f)
                 )
             }
+
             DownloadState.DOWNLOADED -> {
                 Spacer(modifier = modifier.weight(0.15f))
             }
@@ -225,11 +230,17 @@ fun DownloadButton(modifier: Modifier = Modifier, isDownloading: Boolean, onClic
 
     if (isDownloading) {
         IconButton(onClick = onClick, modifier = modifier) {
-            Icon(imageVector = Icons.Rounded.Stop, contentDescription = stringResource(id = R.string.startDownloadTxt))
+            Icon(
+                imageVector = Icons.Rounded.Stop,
+                contentDescription = stringResource(id = R.string.startDownloadTxt)
+            )
         }
     } else {
         IconButton(onClick = onClick, modifier = modifier) {
-            Icon(imageVector = Icons.Rounded.Download, contentDescription = stringResource(id = R.string.startDownloadTxt))
+            Icon(
+                imageVector = Icons.Rounded.Download,
+                contentDescription = stringResource(id = R.string.startDownloadTxt)
+            )
         }
     }
 }
@@ -237,7 +248,10 @@ fun DownloadButton(modifier: Modifier = Modifier, isDownloading: Boolean, onClic
 @Composable
 fun SwitchItemsButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
     IconButton(onClick = onClick, modifier = modifier) {
-        Icon(imageVector = Icons.Rounded.SyncAlt, contentDescription = stringResource(id = R.string.switchVideoPlaylist))
+        Icon(
+            imageVector = Icons.Rounded.SyncAlt,
+            contentDescription = stringResource(id = R.string.switchVideoPlaylist)
+        )
     }
 }
 

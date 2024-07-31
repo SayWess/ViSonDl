@@ -5,19 +5,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.pm.ServiceInfo
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.visondl.R
-import kotlin.random.Random
 
 
 class NotificationManager(private val context: Context) {
 
     private val CHANNEL_ID = "VERBOSE_NOTIFICATION"
-    @JvmField val VERBOSE_NOTIFICATION_CHANNEL_NAME: CharSequence =
+    @JvmField
+    val VERBOSE_NOTIFICATION_CHANNEL_NAME: CharSequence =
         "Verbose WorkManager Notifications"
     private val VERBOSE_NOTIFICATION_CHANNEL_DESCRIPTION =
         "Shows notifications whenever work starts"
@@ -40,7 +38,12 @@ class NotificationManager(private val context: Context) {
         notificationManager?.createNotificationChannel(channel)
     }
 
-    fun basicNotificationBuilder(notificationTitle: String, message: String, progress: Int? = null, createdTime: Long = System.currentTimeMillis()): NotificationCompat.Builder {
+    fun basicNotificationBuilder(
+        notificationTitle: String,
+        message: String,
+        progress: Int? = null,
+        createdTime: Long = System.currentTimeMillis()
+    ): NotificationCompat.Builder {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(notificationTitle)
@@ -56,12 +59,16 @@ class NotificationManager(private val context: Context) {
         return builder
     }
 
-    fun summaryNotification(title: String, summaryText: String = "Downloads"): NotificationCompat.Builder {
+    fun summaryNotification(
+        title: String,
+        summaryText: String = "Downloads"
+    ): NotificationCompat.Builder {
         return basicNotificationBuilder(title, "")
             .setGroupSummary(true)
-            .setStyle(NotificationCompat.InboxStyle()
-                .setBigContentTitle(title)
-                .setSummaryText(summaryText)
+            .setStyle(
+                NotificationCompat.InboxStyle()
+                    .setBigContentTitle(title)
+                    .setSummaryText(summaryText)
             )
             .setSortKey("By Title")
     }

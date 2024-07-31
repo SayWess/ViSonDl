@@ -1,19 +1,9 @@
 package com.example.visondl.workers
 
-import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.example.visondl.ARCHIVES_FOLDER_PATH
-import com.example.visondl.R
 import com.example.visondl.THUMBNAILS_FOLDER_PATH
 import com.example.visondl.model.Item
 import com.example.visondl.model.VideoQuality
@@ -26,12 +16,10 @@ import java.io.FileReader
 import java.io.IOException
 
 const val KEY_ITEM_ID = "ItemID"
-const val KEY_DOWNLOAD_PERCENT = "DownloadPercent"
 const val KEY_ITEM_URL = "ItemUrl"
 const val KEY_IS_PLAYLIST = "isItemPlaylist"
-const val KEY_ITEM = "Item"
 
-val KEY_PLAYLISTS_DAILY_DOWNLOAD = "Playlists Daily Download"
+const val KEY_PLAYLISTS_DAILY_DOWNLOAD = "Playlists Daily Download"
 
 const val KEY_NOTIFICATION_SUMMARY = 0
 
@@ -46,12 +34,17 @@ private const val TAG = "WorkersUtils"
 
 // For ThumbnailDownloadWorker
 
-fun prepareThumbnailDownloadRequest(itemUrl: String, itemId: String, isPlaylist: Boolean): YoutubeDLRequest {
+fun prepareThumbnailDownloadRequest(
+    itemUrl: String,
+    itemId: String,
+    isPlaylist: Boolean
+): YoutubeDLRequest {
     val request = YoutubeDLRequest(itemUrl)
         .addOption("-o", "$THUMBNAILS_FOLDER_PATH/$itemId.%(ext)s")
         .addOption("--write-thumbnail")
         .addOption("--skip-download")
-    return if (isPlaylist) request.addOption("--playlist-start", "1").addOption("--playlist-end", "1") else request
+    return if (isPlaylist) request.addOption("--playlist-start", "1")
+        .addOption("--playlist-end", "1") else request
 }
 
 fun processImage(itemId: String) {
@@ -71,7 +64,7 @@ fun processImage(itemId: String) {
 
     } catch (e: IOException) {
         e.printStackTrace()
-        Log.d(TAG, "Erreur while saving thumbnail")
+        Log.d(TAG, "Error while converting thumbnail from .jpg to .webp")
     }
 }
 
@@ -87,10 +80,25 @@ fun prepareDownloadVideoRequest(item: Item): YoutubeDLRequest {
     if (item.video) {
 
         when (item.videoQuality) {
-            VideoQuality.LOW -> request.addOption("-f", "(mp4)[height=" + "360" + "]+bestaudio/best")
-            VideoQuality.MEDIUM -> request.addOption("-f", "(mp4)[height=" + "720" + "]+bestaudio/best")
-            VideoQuality.HIGH -> request.addOption("-f", "(mp4)[height=" + "1080" + "]+bestaudio/best")
-            VideoQuality.ULTRAHIGH -> request.addOption("-f", "(mp4)[height=" + "1440" + "]+bestaudio/best")
+            VideoQuality.LOW -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "360" + "]+bestaudio/best"
+            )
+
+            VideoQuality.MEDIUM -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "720" + "]+bestaudio/best"
+            )
+
+            VideoQuality.HIGH -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "1080" + "]+bestaudio/best"
+            )
+
+            VideoQuality.ULTRAHIGH -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "1440" + "]+bestaudio/best"
+            )
         }
 
     } else {
@@ -107,17 +115,35 @@ fun prepareDownloadPlaylistRequest(item: Item): YoutubeDLRequest {
         .addOption("-o", item.downloadPath + item.title + "/%(title)s.%(ext)s")
         .addOption("--extractor-args", "youtube:player_client=ios")
         .addOption("--add-metadata")
-        .addOption("--download-archive",ARCHIVES_FOLDER_PATH + "/" + item.id) // Garde en dans un fichier les ids des vidéos déjà téléchargées
+        .addOption(
+            "--download-archive",
+            ARCHIVES_FOLDER_PATH + "/" + item.id
+        ) // Garde en dans un fichier les ids des vidéos déjà téléchargées
         .addOption("-i") // Ne s'arrête pas de télécharger si il y a une erreur, comme une vidéo mise en privée ou bloquée dans le pays
 
 
     if (item.video) {
 
         when (item.videoQuality) {
-            VideoQuality.LOW -> request.addOption("-f", "(mp4)[height=" + "480" + "]+bestaudio/best")
-            VideoQuality.MEDIUM -> request.addOption("-f", "(mp4)[height=" + "720" + "]+bestaudio/best")
-            VideoQuality.HIGH -> request.addOption("-f", "(mp4)[height=" + "1080" + "]+bestaudio/best")
-            VideoQuality.ULTRAHIGH -> request.addOption("-f", "(mp4)[height=" + "1440" + "]+bestaudio/best")
+            VideoQuality.LOW -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "480" + "]+bestaudio/best"
+            )
+
+            VideoQuality.MEDIUM -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "720" + "]+bestaudio/best"
+            )
+
+            VideoQuality.HIGH -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "1080" + "]+bestaudio/best"
+            )
+
+            VideoQuality.ULTRAHIGH -> request.addOption(
+                "-f",
+                "(mp4)[height=" + "1440" + "]+bestaudio/best"
+            )
         }
 
     } else {

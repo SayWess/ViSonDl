@@ -17,8 +17,10 @@ val THUMBNAILS_FOLDER_PATH = "$APP_FOLDER_PATH/Thumbnails"
 val ARCHIVES_FOLDER_PATH = "$APP_FOLDER_PATH/Archives"
 val JSON_DATA_FILE_PATH = "${APP_FOLDER_PATH}/ViSonDl.json"
 val DEFAULT_DOWNLOAD_FOLDER_PATH = "Interne/Music/ViSonDl/"
-val MUSICS_FOLDER_PATH = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).path}/ViSonDl/"
-val VIDEOS_FOLDER_PATH = "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).path}/ViSonDl/"
+val MUSICS_FOLDER_PATH =
+    "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).path}/ViSonDl/"
+val VIDEOS_FOLDER_PATH =
+    "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).path}/ViSonDl/"
 
 // WORK MANAGER TAGS
 const val TAG_OUTPUT = "Output"
@@ -76,7 +78,10 @@ fun initLibs(applicationContext: Context) {
 }
 
 private fun test() {
-    val youtubeDLDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "youtubedl-android")
+    val youtubeDLDir = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+        "youtubedl-android"
+    )
     val request = YoutubeDLRequest("https://www.youtube.com/watch?v=sFzDQ2OjFko")
     request.addOption("--extractor-args", "youtube:player_client=ios")
     //request.addOption("--downloader", "libaria2c.so");
@@ -89,7 +94,7 @@ private fun test() {
     YoutubeDL.execute(
         request = request,
         processId = processId,
-        callback = { progress : Float, etaInSeconds : Long, _ : String ->
+        callback = { progress: Float, etaInSeconds: Long, _: String ->
             println("$progress% (ETA $etaInSeconds seconds)")
         }
     )

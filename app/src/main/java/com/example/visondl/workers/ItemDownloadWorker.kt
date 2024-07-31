@@ -4,19 +4,14 @@ import android.content.Context
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.util.Log
-import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.ListenableWorker.Result.Success
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import androidx.work.workDataOf
 import com.example.visondl.data.DataManager
 import com.example.visondl.model.DownloadState
-import com.example.visondl.model.Item
 import com.example.visondl.notification.NotificationManager
-import com.google.gson.Gson
 import com.yausername.youtubedl_android.YoutubeDL
-import java.lang.Thread.sleep
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -107,12 +102,15 @@ class ItemDownloadWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
             Success.success()
         } catch (throwable: Throwable) {
             Log.e(TAG, "Error while downloading Item")
+            throwable.printStackTrace()
             item.state = DownloadState.ERROR
 
+
+            val errorMessage = if (throwable.message?.contains("Requested format is not available") == true) "Download error : Video quality unavailable" else "Download error"
             ////
             notificationManager.buildNotification(
                 notificationId + 1,
-                notificationManager.basicNotificationBuilder(item.title, "Download Error", createdTime = currentTime)
+                notificationManager.basicNotificationBuilder(item.title, errorMessage, createdTime = currentTime)
             )
             ////
 

@@ -11,36 +11,28 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.example.visondl.TAG_OUTPUT
 import com.example.visondl.checkDownloadPath
 import com.example.visondl.checkSpellTitle
 import com.example.visondl.data.DataManager
 import com.example.visondl.ui.ItemUiState
 import com.example.visondl.ui.ItemsUiState
 import com.example.visondl.workers.ItemDownloadWorker
-import com.example.visondl.workers.KEY_DOWNLOAD_PERCENT
 import com.example.visondl.workers.KEY_IS_PLAYLIST
-import com.example.visondl.workers.KEY_ITEM
 import com.example.visondl.workers.KEY_ITEM_ID
 import com.example.visondl.workers.KEY_ITEM_URL
 import com.example.visondl.workers.KEY_PLAYLISTS_DAILY_DOWNLOAD
-import com.example.visondl.workers.PERIODIC_WORKER_FLEX_TIME
 import com.example.visondl.workers.PERIODIC_WORKER_REPEAT_TIME
 import com.example.visondl.workers.PlaylistsDailyDownloadWorker
 import com.example.visondl.workers.TAG_ITEM_DOWNLOAD
 import com.example.visondl.workers.TAG_PLAYLIST
 import com.example.visondl.workers.TAG_VIDEO
 import com.example.visondl.workers.ThumbnailDownloadWorker
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import java.lang.Thread.sleep
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "ItemsViewModel"
@@ -60,8 +52,7 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
     }
 
     fun workInfosObserver(): Observer<List<WorkInfo>> {
-        return Observer {
-            listOfWorkInfo ->
+        return Observer { listOfWorkInfo ->
 
             if (listOfWorkInfo.isEmpty()) {
                 return@Observer
@@ -90,14 +81,21 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
 
 
         //val periodicWorkRequest = PeriodicWorkRequestBuilder<PlaylistsDailyDownloadWorker>(PERIODIC_WORKER_REPEAT_TIME, TimeUnit.HOURS, PERIODIC_WORKER_FLEX_TIME, TimeUnit.MINUTES)
-        val periodicWorkRequest = PeriodicWorkRequestBuilder<PlaylistsDailyDownloadWorker>(PERIODIC_WORKER_REPEAT_TIME, TimeUnit.HOURS)
-        //    .setInitialDelay(1, TimeUnit.HOURS)
+        val periodicWorkRequest = PeriodicWorkRequestBuilder<PlaylistsDailyDownloadWorker>(
+            PERIODIC_WORKER_REPEAT_TIME,
+            TimeUnit.HOURS
+        )
+            //    .setInitialDelay(1, TimeUnit.HOURS)
             .setConstraints(constraints)
             .addTag(TAG_ITEM_DOWNLOAD)
             .build()
 
         // Queue the work
-        workManager.enqueueUniquePeriodicWork(KEY_PLAYLISTS_DAILY_DOWNLOAD, ExistingPeriodicWorkPolicy.UPDATE, periodicWorkRequest)
+        workManager.enqueueUniquePeriodicWork(
+            KEY_PLAYLISTS_DAILY_DOWNLOAD,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            periodicWorkRequest
+        )
 
     }
 
@@ -135,9 +133,10 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
     private fun startItemDownload(itemId: String, isPlaylist: Boolean) {
         Log.d(TAG, "ENQUEUING WORKER, Item : $itemId ")
         val workerRequest = OneTimeWorkRequestBuilder<ItemDownloadWorker>()
-            .setInputData(Data.Builder()
-                .putString(KEY_ITEM_ID, itemId)
-                .build()
+            .setInputData(
+                Data.Builder()
+                    .putString(KEY_ITEM_ID, itemId)
+                    .build()
             )
             .addTag(if (isPlaylist) TAG_PLAYLIST else TAG_VIDEO)
             .addTag(TAG_ITEM_DOWNLOAD)
@@ -156,8 +155,8 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
 
         _uiState.update {
             it.copy(
-                isDownloadingVideos =  _uiState.value.items.any { item -> !item.isPlaylist && item.state == DownloadState.DOWNLOADING },
-                isDownloadingPlaylists =  _uiState.value.items.any { item -> item.isPlaylist && item.state == DownloadState.DOWNLOADING } ,
+                isDownloadingVideos = _uiState.value.items.any { item -> !item.isPlaylist && item.state == DownloadState.DOWNLOADING },
+                isDownloadingPlaylists = _uiState.value.items.any { item -> item.isPlaylist && item.state == DownloadState.DOWNLOADING },
                 items = sortItems(getLastItems())
             )
         }
@@ -168,7 +167,7 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
      * Map the items received from the DataManager to transform them in ItemUiState
      * @return a list of ItemUiState
      */
-    private fun getLastItems() : List<ItemUiState>  {
+    private fun getLastItems(): List<ItemUiState> {
         return DataManager().getItems().map { item ->
             ItemUiState(
                 id = item.id,
@@ -211,7 +210,7 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
         }
     }
 
-    private fun sortItems(items: List<ItemUiState>) : List<ItemUiState> {
+    private fun sortItems(items: List<ItemUiState>): List<ItemUiState> {
         val listError = mutableListOf<ItemUiState>()
         val listDownloadableToDownload = mutableListOf<ItemUiState>()
         val listDownloading = mutableListOf<ItemUiState>()
@@ -219,7 +218,10 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
         items.groupBy { it.state }.forEach { (key, value) ->
             when (key) {
                 DownloadState.ERROR -> listError.addAll(value)
-                DownloadState.TODOWNLOAD, DownloadState.DOWNLOADABLE -> listDownloadableToDownload.addAll(value)
+                DownloadState.TODOWNLOAD, DownloadState.DOWNLOADABLE -> listDownloadableToDownload.addAll(
+                    value
+                )
+
                 DownloadState.DOWNLOADING -> listDownloading.addAll(value)
                 DownloadState.DOWNLOADED -> listDownloaded.addAll(value)
             }
@@ -251,11 +253,12 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
     fun downloadImage(itemId: String) {
         val item = DataManager().getItemById(itemId)
         val workerRequest = OneTimeWorkRequestBuilder<ThumbnailDownloadWorker>()
-            .setInputData(Data.Builder()
-                .putString(KEY_ITEM_URL, item.url)
-                .putString(KEY_ITEM_ID, itemId)
-                .putString(KEY_IS_PLAYLIST, item.isPlaylist.toString())
-                .build()
+            .setInputData(
+                Data.Builder()
+                    .putString(KEY_ITEM_URL, item.url)
+                    .putString(KEY_ITEM_ID, itemId)
+                    .putString(KEY_IS_PLAYLIST, item.isPlaylist.toString())
+                    .build()
             ).build()
         workManager.enqueueUniqueWork("Image-${itemId}", ExistingWorkPolicy.KEEP, workerRequest)
     }

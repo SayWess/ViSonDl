@@ -16,11 +16,18 @@ private const val TAG = "DataManager"
 class DataManager {
 
 
-    fun addItem(url: String, title: String, ) {
+    fun addItem(url: String, title: String) {
         if (validUrl(url)) {
             val id = getId(url = url)
             if (!(items.any { item -> item.id == id }))
-                items.add(Item(url = url, id = id, title = checkSpellTitle(title), isPlaylist = isPlaylist(url)))
+                items.add(
+                    Item(
+                        url = url,
+                        id = id,
+                        title = checkSpellTitle(title),
+                        isPlaylist = isPlaylist(url)
+                    )
+                )
         }
 
     }
@@ -33,15 +40,15 @@ class DataManager {
         return items.first { it.id == itemId }
     }
 
-    private fun validUrl(url: String) : Boolean {
+    private fun validUrl(url: String): Boolean {
         return url.contains("playlist") || url.contains("v=")
     }
 
-    private fun isPlaylist(url: String) : Boolean {
+    private fun isPlaylist(url: String): Boolean {
         return url.contains("playlist")
     }
 
-    private fun getId(url: String) : String {
+    private fun getId(url: String): String {
         val start = url.indexOfFirst { char -> char == '=' } + 1
         return url.substring(start, url.lastIndexOf('&'))
     }
@@ -68,14 +75,15 @@ class DataManager {
     }
 
     companion object {
-        val items : MutableList<Item> = initData()
+        val items: MutableList<Item> = initData()
 
         private fun initData(): MutableList<Item> {
             val gson = Gson()
             var itemsList = mutableListOf<Item>()
             try {
                 // Récupération du contenu du fichier .json en String
-                val strContent = FileInputStream(JSON_DATA_FILE_PATH).bufferedReader().use { it.readText() }
+                val strContent =
+                    FileInputStream(JSON_DATA_FILE_PATH).bufferedReader().use { it.readText() }
                 Log.d("Data Manager", "Contenue du fichier JSON : $strContent")
                 itemsList = gson.fromJson(strContent, Array<Item>::class.java).toMutableList()
             } catch (e: IOException) {

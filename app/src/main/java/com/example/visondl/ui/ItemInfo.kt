@@ -1,7 +1,6 @@
 package com.example.visondl.ui
 
 import android.util.Log
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DeleteForever
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.visondl.R
-import com.example.visondl.ui.theme.ViSonDlTheme
-import java.io.File
 import com.example.visondl.THUMBNAILS_FOLDER_PATH
 import com.example.visondl.model.DownloadState
 import com.example.visondl.model.VideoQuality
+import com.example.visondl.ui.theme.ViSonDlTheme
+import java.io.File
 
 private const val TAG = "ItemInfo"
 
@@ -77,7 +74,7 @@ fun ItemInfo(
                 value = itemUiState.title,
                 onValueChange = itemUiState.onTitleChange,
                 enabled = itemUiState.state != DownloadState.DOWNLOADING,
-                label = {Text(stringResource(id = R.string.title))},
+                label = { Text(stringResource(id = R.string.title)) },
                 colors = TextFieldDefaults.colors(
                     // Text Color
                     focusedTextColor = MaterialTheme.colorScheme.onSurface,
@@ -143,7 +140,7 @@ fun ItemInfo(
                 value = itemUiState.downloadPath,
                 onValueChange = itemUiState.onDownloadPathChange,
                 enabled = itemUiState.state != DownloadState.DOWNLOADING,
-                label = {Text(stringResource(id = R.string.downloadPath))},
+                label = { Text(stringResource(id = R.string.downloadPath)) },
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = MaterialTheme.colorScheme.onSurface,
                     unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
@@ -234,7 +231,10 @@ fun ItemInfo(
                     color = MaterialTheme.colorScheme.secondary
                 )
                 Spacer(modifier = Modifier.weight(1F))
-                ExposedDropdownMenuBox(itemVideoQualityIndex = itemUiState.videoQuality.ordinal, onVideoQualityChange = itemUiState.onVideoQualityChange)
+                ExposedDropdownMenuBox(
+                    itemVideoQualityIndex = itemUiState.videoQuality.ordinal,
+                    onVideoQualityChange = itemUiState.onVideoQualityChange
+                )
 
             }
 
@@ -248,11 +248,12 @@ fun ItemInfo(
                 .clip(CircleShape)
                 .padding(bottom = 10.dp),
         ) {
-            Icon(imageVector = Icons.Rounded.DeleteForever, contentDescription = stringResource(id = R.string.deleteItem))
+            Icon(
+                imageVector = Icons.Rounded.DeleteForever,
+                contentDescription = stringResource(id = R.string.deleteItem)
+            )
         }
     }
-
-
 
 
 }
@@ -261,7 +262,10 @@ fun ItemInfo(
 @Composable
 fun ItemInfoPreview() {
     ViSonDlTheme {
-        ItemInfo(modifier = Modifier, onDeleteClick = {}, itemUiState = ItemUiState("default", "default", false, "path", VideoQuality.LOW,
-            false, DownloadState.ERROR, "0", {}, {}, {}, {}, {}, {}))
+        ItemInfo(modifier = Modifier,
+            onDeleteClick = {},
+            itemUiState = ItemUiState("default", "default", false, "path", VideoQuality.LOW,
+                false, DownloadState.ERROR, "0", {}, {}, {}, {}, {}, {})
+        )
     }
 }

@@ -11,19 +11,19 @@ data class ItemsUiState(
 
 
 data class ItemUiState(
-    val id : String,
+    val id: String,
     val title: String,
-    val isPlaylist : Boolean,
-    var downloadPath : String,
-    var videoQuality : VideoQuality = VideoQuality.MEDIUM,
-    var video : Boolean = false,
+    val isPlaylist: Boolean,
+    var downloadPath: String,
+    var videoQuality: VideoQuality = VideoQuality.MEDIUM,
+    var video: Boolean = false,
     val state: DownloadState,
     val downloadPercent: String?,
-    val onCheckedChange : (Boolean) -> Unit,
-    val onTitleChange : (String) -> Unit,
-    val onDownloadPathChange : (String) -> Unit,
-    val onVideoChange : (Boolean) -> Unit,
-    val onVideoQualityChange : (VideoQuality) -> Unit,
-    val onItemLongClick : () -> Unit
+    val onCheckedChange: (Boolean) -> Unit,
+    val onTitleChange: (String) -> Unit,
+    val onDownloadPathChange: (String) -> Unit,
+    val onVideoChange: (Boolean) -> Unit,
+    val onVideoQualityChange: (VideoQuality) -> Unit,
+    val onItemLongClick: () -> Unit
 )
 

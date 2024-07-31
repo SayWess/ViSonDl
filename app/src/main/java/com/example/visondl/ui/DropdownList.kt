@@ -31,12 +31,12 @@ fun ExposedDropdownMenuBox(
     itemVideoQualityIndex: Int,
     onVideoQualityChange: (VideoQuality) -> Unit
 ) {
-    val videoQualities = arrayOf("480p","720p", "1080p", "1440p")
+    val videoQualities = arrayOf("480p", "720p", "1080p", "1440p")
     var expanded by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier,
-            //.padding(5.dp)
+        //.padding(5.dp)
     ) {
         ExposedDropdownMenuBox(
             modifier = Modifier,
