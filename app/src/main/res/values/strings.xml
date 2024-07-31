@@ -9,4 +9,7 @@
     <string name="thumbnailImage">Thumbnail Image</string>
     <string name="title">Title</string>
     <string name="downloadPath">Download Path</string>
+    <string name="itemInfoVideoText">Video</string>
+    <string name="itemInfoVideoQualityText">Video quality</string>
+
 </resources>

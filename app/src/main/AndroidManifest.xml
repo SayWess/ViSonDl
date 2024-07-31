@@ -29,11 +29,6 @@
         tools:targetApi="31">
 
         <service
-            android:name=".data.DataStore"
-            android:enabled="true"
-            android:exported="true" />
-
-        <service
             android:name="androidx.work.impl.foreground.SystemForegroundService"
             android:foregroundServiceType="dataSync"
             tools:node="merge" />

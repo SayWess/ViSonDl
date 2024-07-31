@@ -114,7 +114,7 @@ fun prepareDownloadPlaylistRequest(item: Item): YoutubeDLRequest {
     if (item.video) {
 
         when (item.videoQuality) {
-            VideoQuality.LOW -> request.addOption("-f", "(mp4)[height=" + "360" + "]+bestaudio/best")
+            VideoQuality.LOW -> request.addOption("-f", "(mp4)[height=" + "480" + "]+bestaudio/best")
             VideoQuality.MEDIUM -> request.addOption("-f", "(mp4)[height=" + "720" + "]+bestaudio/best")
             VideoQuality.HIGH -> request.addOption("-f", "(mp4)[height=" + "1080" + "]+bestaudio/best")
             VideoQuality.ULTRAHIGH -> request.addOption("-f", "(mp4)[height=" + "1440" + "]+bestaudio/best")

@@ -1,24 +1,31 @@
 package com.example.visondl.ui
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.SyncAlt
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +33,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -71,7 +80,9 @@ fun ItemsScreen(
             itemsList = uiState.items.filter { item -> if (isPlaylist) item.isPlaylist else !item.isPlaylist }
         )
 
-        Row(modifier = modifier.align(Alignment.BottomCenter)) {
+        Row(modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(bottom = 10.dp)) {
             DownloadButton(
                 modifier = modifier,
                 isDownloading = if (isPlaylist) uiState.isDownloadingPlaylists else uiState.isDownloadingVideos,
@@ -98,8 +109,8 @@ fun ItemsColumn(
     onImageLoadingError: (String) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
-        items(items = itemsList, key = {item -> item.id}) {
-                item ->
+        itemsIndexed(items = itemsList, key = { _, item -> item.id}) {
+                index, item ->
             ItemRow(item = item,
                 onItemInfoClick = {
                     Log.d(TAG, "$item")
@@ -108,6 +119,8 @@ fun ItemsColumn(
                 onItemLongClick = item.onItemLongClick,
                 onImageLoadingError = { onImageLoadingError(item.id) }
             )
+
+            if (index < itemsList.lastIndex) HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.5F))
         }
     }
 }
@@ -143,7 +156,7 @@ fun ItemRow(
             onError = { onImageLoadingError() },
             placeholder = painterResource(R.drawable.ic_broken_image),
             contentDescription = stringResource(id = R.string.thumbnailImage),
-            modifier = modifier.width((90.dp)),
+            modifier = modifier.width((90.dp)).clip(RoundedCornerShape(percent = 70)),
             contentScale = ContentScale.FillWidth
             //modifier = modifier.weight(1f)
         )
@@ -151,12 +164,13 @@ fun ItemRow(
         Text(
             text = item.title,
             textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.secondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = modifier
                 .weight(1f)
                 .padding(2.dp)
+                .padding(start = 5.dp)
         )
 
         when (item.state) {

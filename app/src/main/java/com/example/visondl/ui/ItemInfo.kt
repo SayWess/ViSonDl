@@ -1,11 +1,12 @@
 package com.example.visondl.ui
 
 import android.util.Log
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,20 +14,20 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DeleteForever
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,8 +60,8 @@ fun ItemInfo(
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    //.data(File("$THUMBNAILS_FOLDER_PATH/${itemUiState.id}.webp"))
-                    .data(File(""))
+                    .data(File("$THUMBNAILS_FOLDER_PATH/${itemUiState.id}.webp"))
+                    //.data(File(""))
                     .build(),
                 error = painterResource(R.drawable.ic_broken_image),
                 placeholder = painterResource(R.drawable.ic_broken_image),
@@ -70,17 +71,20 @@ fun ItemInfo(
             )
 
             TextField(
-                modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp),
                 value = itemUiState.title,
                 onValueChange = itemUiState.onTitleChange,
                 enabled = itemUiState.state != DownloadState.DOWNLOADING,
                 label = {Text(stringResource(id = R.string.title))},
                 colors = TextFieldDefaults.colors(
+                    // Text Color
                     focusedTextColor = MaterialTheme.colorScheme.onSurface,
                     unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                     disabledTextColor = MaterialTheme.colorScheme.onSurface,
                     errorTextColor = MaterialTheme.colorScheme.onSurface,
-
+                    // Container Color (background)
                     focusedContainerColor = MaterialTheme.colorScheme.surface,
                     unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     disabledContainerColor = MaterialTheme.colorScheme.surface,
@@ -89,11 +93,11 @@ fun ItemInfo(
                     cursorColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     errorCursorColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     selectionColors = LocalTextSelectionColors.current,
-
-                    focusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    unfocusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    disabledIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    errorIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    // Little bottom bar
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent,
 
                     focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -104,7 +108,7 @@ fun ItemInfo(
                     unfocusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     disabledTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     errorTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-
+                    // Text Label Color
                     focusedLabelColor = MaterialTheme.colorScheme.secondary,
                     unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
                     disabledLabelColor = MaterialTheme.colorScheme.secondary,
@@ -133,7 +137,9 @@ fun ItemInfo(
             )
 
             TextField(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp),
                 value = itemUiState.downloadPath,
                 onValueChange = itemUiState.onDownloadPathChange,
                 enabled = itemUiState.state != DownloadState.DOWNLOADING,
@@ -153,10 +159,10 @@ fun ItemInfo(
                     errorCursorColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     selectionColors = LocalTextSelectionColors.current,
 
-                    focusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    unfocusedIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    disabledIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    errorIndicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent,
 
                     focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -167,7 +173,7 @@ fun ItemInfo(
                     unfocusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     disabledTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     errorTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-
+                    // Label Text Color
                     focusedLabelColor = MaterialTheme.colorScheme.secondary,
                     unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
                     disabledLabelColor = MaterialTheme.colorScheme.secondary,
@@ -198,14 +204,14 @@ fun ItemInfo(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
+                    .padding(horizontal = 15.dp, vertical = 5.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Vidéo",
+                    text = stringResource(id = R.string.itemInfoVideoText),
                     modifier = Modifier,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.secondary
                 )
                 Switch(
                     checked = itemUiState.video,
@@ -215,14 +221,32 @@ fun ItemInfo(
                 )
             }
 
+            //HorizontalDivider(modifier = Modifier, thickness = 1.dp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.itemInfoVideoQualityText),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+                Spacer(modifier = Modifier.weight(1F))
+                ExposedDropdownMenuBox(itemVideoQualityIndex = itemUiState.videoQuality.ordinal, onVideoQualityChange = itemUiState.onVideoQualityChange)
+
+            }
+
         }
 
         IconButton(
             enabled = itemUiState.state != DownloadState.DOWNLOADING,
             onClick = onDeleteClick,
-            modifier = modifier
+            modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .padding(bottom = 10.dp),
         ) {
             Icon(imageVector = Icons.Rounded.DeleteForever, contentDescription = stringResource(id = R.string.deleteItem))
         }

@@ -80,7 +80,7 @@ fun VisonDlApp(
         NavHost(
             navController = navController,
             startDestination = VisonDlScreen.Video.name,
-            modifier = Modifier.padding()
+            modifier = Modifier
         ) {
             composable(route = VisonDlScreen.Video.name) {
                 ItemsScreen(
@@ -96,8 +96,6 @@ fun VisonDlApp(
                         itemsViewModel.downloadImage(it)
                     },
                     onDownloadClick = {
-                        //itemsViewModel.addItem("https://www.youtube.com/watch?v=sFzDQ2OjFko&", "Hanezeve Carhadina")
-
                         itemsViewModel.toggleDownload(isPlaylist = false)
                     }
                 )
@@ -118,7 +116,6 @@ fun VisonDlApp(
                         itemsViewModel.downloadImage(it)
                     },
                     onDownloadClick = {
-                        //itemsViewModel.addItem("AddTest", "title Test")
                         itemsViewModel.toggleDownload(isPlaylist = true)
                     }
                 )
@@ -132,12 +129,10 @@ fun VisonDlApp(
                     val itemUiState = uiState.items.find { it.id == itemId } ?: DEFAULT_ITEM_UI_STATE
 
                     ItemInfo(
-                        modifier = Modifier.padding(innerPadding),
+                        modifier = Modifier.padding(top = innerPadding.calculateTopPadding(), bottom = innerPadding.calculateBottomPadding()),
                         onDeleteClick = {
-                            //if (itemUiState.state != DownloadState.DOWNLOADING) {
-                                itemsViewModel.deleteItemById(itemId)
-                                navController.popBackStack(VisonDlScreen.Video.name, false)
-                            //}
+                            itemsViewModel.deleteItemById(itemId)
+                            navController.popBackStack(VisonDlScreen.Video.name, false)
                         },
                         itemUiState = itemUiState
                     )
