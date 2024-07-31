@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Download
@@ -64,7 +65,10 @@ fun ItemsScreen(
     Log.d(TAG, "ItemsScreen")
 
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
 
         ItemsColumn(
             modifier = modifier,
@@ -83,6 +87,8 @@ fun ItemsScreen(
                 isDownloading = if (isPlaylist) uiState.isDownloadingPlaylists else uiState.isDownloadingVideos,
                 onClick = onDownloadClick
             )
+
+            Spacer(modifier = modifier.width(5.dp))
 
             SwitchItemsButton(
                 modifier = modifier,
@@ -134,10 +140,10 @@ fun ItemRow(
 
     val rowModifier = when (item.state) {
         DownloadState.DOWNLOADABLE, DownloadState.TODOWNLOAD, DownloadState.DOWNLOADING -> modifier.background(
-            MaterialTheme.colorScheme.primaryContainer
+            MaterialTheme.colorScheme.secondaryContainer
         )
 
-        DownloadState.DOWNLOADED -> modifier.background(MaterialTheme.colorScheme.secondaryContainer)
+        DownloadState.DOWNLOADED -> modifier.background(MaterialTheme.colorScheme.onPrimaryContainer)
         DownloadState.ERROR -> modifier.background(MaterialTheme.colorScheme.errorContainer)
     }
 
@@ -167,7 +173,7 @@ fun ItemRow(
         Text(
             text = item.title,
             textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.secondary,
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = modifier
@@ -185,18 +191,18 @@ fun ItemRow(
                     checked = item.state == DownloadState.TODOWNLOAD,
                     onCheckedChange = item.onCheckedChange,
                     colors = CheckboxColors(
-                        checkedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        checkedCheckmarkColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        checkedBoxColor = MaterialTheme.colorScheme.primaryContainer,
-                        uncheckedCheckmarkColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        uncheckedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        uncheckedBoxColor = MaterialTheme.colorScheme.primaryContainer,
-                        disabledCheckedBoxColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        disabledUncheckedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        disabledUncheckedBoxColor = MaterialTheme.colorScheme.primaryContainer,
-                        disabledBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        disabledIndeterminateBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        disabledIndeterminateBoxColor = MaterialTheme.colorScheme.primaryContainer
+                        checkedBorderColor = MaterialTheme.colorScheme.outline,
+                        checkedCheckmarkColor = MaterialTheme.colorScheme.onSurface,
+                        checkedBoxColor = MaterialTheme.colorScheme.surface,
+                        uncheckedCheckmarkColor = MaterialTheme.colorScheme.onSurface,
+                        uncheckedBorderColor = MaterialTheme.colorScheme.outline,
+                        uncheckedBoxColor = MaterialTheme.colorScheme.surface,
+                        disabledCheckedBoxColor = MaterialTheme.colorScheme.onSurface,
+                        disabledUncheckedBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledUncheckedBoxColor = MaterialTheme.colorScheme.surface,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledIndeterminateBorderColor = MaterialTheme.colorScheme.onSurface,
+                        disabledIndeterminateBoxColor = MaterialTheme.colorScheme.surface
 
                     )
                 )
@@ -229,14 +235,22 @@ fun ItemRow(
 fun DownloadButton(modifier: Modifier = Modifier, isDownloading: Boolean, onClick: () -> Unit) {
 
     if (isDownloading) {
-        IconButton(onClick = onClick, modifier = modifier) {
+        IconButton(
+            onClick = onClick, modifier = modifier
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
             Icon(
                 imageVector = Icons.Rounded.Stop,
                 contentDescription = stringResource(id = R.string.startDownloadTxt)
             )
         }
     } else {
-        IconButton(onClick = onClick, modifier = modifier) {
+        IconButton(
+            onClick = onClick, modifier = modifier
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
             Icon(
                 imageVector = Icons.Rounded.Download,
                 contentDescription = stringResource(id = R.string.startDownloadTxt)
@@ -247,7 +261,11 @@ fun DownloadButton(modifier: Modifier = Modifier, isDownloading: Boolean, onClic
 
 @Composable
 fun SwitchItemsButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
-    IconButton(onClick = onClick, modifier = modifier) {
+    IconButton(
+        onClick = onClick, modifier = modifier
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
         Icon(
             imageVector = Icons.Rounded.SyncAlt,
             contentDescription = stringResource(id = R.string.switchVideoPlaylist)

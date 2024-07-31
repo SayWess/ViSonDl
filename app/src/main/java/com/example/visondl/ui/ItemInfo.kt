@@ -1,6 +1,7 @@
 package com.example.visondl.ui
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -246,6 +247,7 @@ fun ItemInfo(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(bottom = 10.dp),
         ) {
             Icon(

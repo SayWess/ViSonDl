@@ -79,10 +79,10 @@ fun ExposedDropdownMenuBox(
                     disabledLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     errorLeadingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
 
-                    focusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    unfocusedTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    disabledTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    errorTrailingIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    errorTrailingIconColor = MaterialTheme.colorScheme.onSurface,
 
                     focusedLabelColor = MaterialTheme.colorScheme.secondary,
                     unfocusedLabelColor = MaterialTheme.colorScheme.secondary,
