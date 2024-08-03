@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 
 
-            val newIntent by produceState(initialValue = null as Intent?) {
+            val newIntent by produceState(initialValue = intent) {
                 val consumer = androidx.core.util.Consumer<Intent> {
                     this.value = it
                 }

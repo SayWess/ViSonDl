@@ -49,8 +49,8 @@ fun VisonDlApp(
 
     Log.d(TAG, "MainScreen")
     // Get Intent to add new item
-    //Log.d(TAG, "${newIntent?.getStringExtra(Intent.EXTRA_TEXT)}")
-    itemsViewModel.proceedIntent(newIntent)
+    //Log.d(TAG, "${newIntent}")
+    itemsViewModel.processIntent(newIntent)
 
     val backStackEntry by navController.currentBackStackEntryAsState()
 

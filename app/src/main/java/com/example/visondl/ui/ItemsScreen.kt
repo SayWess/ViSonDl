@@ -210,9 +210,9 @@ fun ItemRow(
 
             DownloadState.DOWNLOADING -> {
                 Text(
-                    text = "${item.downloadPercent}" + if (!item.isPlaylist) "%" else "",
+                    text = "${item.downloadPercent}" + if (!item.isPlaylist && item.downloadPercent != "") "%" else "",
                     fontSize = TextUnit(14F, TextUnitType.Sp),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     modifier = modifier

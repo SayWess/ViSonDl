@@ -237,13 +237,15 @@ class ItemsViewModel(private val workManager: WorkManager) : ViewModel() {
         collectData()
     }
 
-    fun proceedIntent(intent: Intent?) {
-        if (intent != null && intent.type == "text/plain") {
-            val url = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
-            val title = intent.getStringExtra(Intent.EXTRA_SUBJECT) ?: "Untitled"
-            Log.d(TAG, url + "\n" + title)
-            addItem(url = url, title = title)
-        }
+    fun processIntent(intent: Intent?) {
+        if (intent == null || intent.type != "text/plain") return
+
+        val url = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return
+        val title = intent.getStringExtra(Intent.EXTRA_SUBJECT) ?: "Untitled"
+        Log.d(TAG, url + "\n" + title)
+        addItem(url = url, title = title)
+        intent.removeExtra(Intent.EXTRA_TEXT)
+        intent.removeExtra(Intent.EXTRA_SUBJECT)
     }
 
     /**
